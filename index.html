@@ -72,13 +72,52 @@
             // connect socket.io
             let socket = io.connect('http://127.0.0.1:4000')
             // check the connection
-            if (socket !== undefined) 
-            {
-                console.log("connected to socket...",)
-                
-                console.log("connected to socket...")
+            if (socket !== undefined) {
+                console.log("connected to socket...", );
+
+                // handle output
                 socket.on('output', function (data) {
-                    console.log(data);
+                    // console.log(data);
+                    if(data.length){
+                        for (let x;x<data.length;x++){
+                            let message=document.createElement('div');
+                            message.setAttribute('class','chat-message');
+                            message.textContent=data.name+":"+data[x].message;
+                            message.appendChild(message);
+                            message.insertBefore(message,message.firstChild);
+
+                        }
+                    }
+                });
+                // get status from server
+                socket.on('status',function(data){
+// get messgae status
+setStatus((typeof data=== 'object')? data.message:data);
+// if status clear clear tex
+if(data.clear){
+    textarea.value='';
+}
+                });
+                // handle input
+                testarea.addEventListener('keydown',function(event){
+                    if(event.which === 13 && event.shiftKey == flase){
+                        // emit to server input
+                        socket.emit('input',{
+                            name:username.name,
+                            message:testarea.message
+                        });
+                        event.preventDefault();
+                    }
+
+                });
+                // handle chat clear
+                clearbtn.addEventListener('click',function(event){
+                    socket.emit('clear');
+                });
+
+                // clear message
+                socket.on('cleared',function(){
+                    message.textContent='';
                 })
             }
         })();
