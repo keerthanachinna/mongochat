@@ -25,11 +25,11 @@
                 </h1>
                 <div id="status"></div>
                 <div id="chat">
-                    <input type="text" id="name" class="form-controller" placeholder="enter your name....">
+                    <input type="text" id="username" class="form-controller" placeholder="enter your name....">
                 </div>
                 <br>
                 <div class="card">
-                    <div id="message" class="card-block">
+                    <div id="messages" class="card-block">
 
                     </div>
                 </div>
@@ -49,9 +49,9 @@
             }
             // get elemt
             let status = element('status');
-            let message = element('message');
+            let messages= element('messages');
 
-            let testarea = element('testarea');
+            let textarea = element('textarea');
 
             let username = element('username');
             let clearbtn = element('clear');
@@ -83,8 +83,8 @@
                             let message=document.createElement('div');
                             message.setAttribute('class','chat-message');
                             message.textContent=data.name+":"+data[x].message;
-                            message.appendChild(message);
-                            message.insertBefore(message,message.firstChild);
+                            messages.appendChild(message);
+                            messages.insertBefore(message,message.firstChild);
 
                         }
                     }
@@ -99,12 +99,12 @@ if(data.clear){
 }
                 });
                 // handle input
-                testarea.addEventListener('keydown',function(event){
+                textarea.addEventListener('keydown',function(event){
                     if(event.which === 13 && event.shiftKey == flase){
                         // emit to server input
                         socket.emit('input',{
-                            name:username.name,
-                            message:testarea.message
+                            name:username.value,
+                            message:textarea.values
                         });
                         event.preventDefault();
                     }
