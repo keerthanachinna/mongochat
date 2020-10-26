@@ -1,4 +1,4 @@
-const mongo = require('mongodb');
+const mongo = require('mongodb').MongoClient;
 const client = require('socket.io').listen(4000).sockets;
 
 
@@ -10,7 +10,7 @@ mongo.connect('mongodb://127.0.0.1/mongochat',function(err, db) {
     }
     console.log("Mongodb connected");
 
-    client.on('connection', function () {
+    client.on('connection', function (socket) {
         let chat = db.collection('chats');
         // create function to send staus
         sendStaus = function (s) {
@@ -31,7 +31,7 @@ mongo.connect('mongodb://127.0.0.1/mongochat',function(err, db) {
 
             if (name == '' || message == '') {
                 // send error status
-                sensStatus('Please enter the name and message');
+                sendStaus('Please enter the name and message');
 
 
             }
@@ -52,7 +52,7 @@ mongo.connect('mongodb://127.0.0.1/mongochat',function(err, db) {
             // remove all chats from collection
             chat.remove({}, function () {
                 // emit cleared
-                socket.emt();
+                socket.emit();
             })
         })
 
