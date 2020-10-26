@@ -52,7 +52,7 @@ mongo.connect('mongodb://127.0.0.1/mongochat',function(err, db) {
             // remove all chats from collection
             chat.remove({}, function () {
                 // emit cleared
-                socket.emit();
+                socket.emit('cleared');
             })
         })
 
